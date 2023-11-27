@@ -4,52 +4,59 @@ document.getElementById('verificarBtn').addEventListener('click', function () {
 
     if (cpf.length === 9) {
         function calcularDigitosVerificadores(cpf) {
-            var d0, d1, d2, d3, d4, d5, d6, d7, d8;
-            var somaprod1, somaprod2;
-            var dezena, unidade;
-            var restoAux;
+            let soma = 0;
+            let peso = 10;
 
-            d0 = cpf % 10; d1 = Math.floor(cpf / 10) % 10; d2 = Math.floor(cpf / 100) % 10;
-            d3 = Math.floor(cpf / 1000) % 10; d4 = Math.floor(cpf / 10000) % 10; d5 = Math.floor(cpf / 100000) % 10;
-            d6 = Math.floor(cpf / 1000000) % 10; d7 = Math.floor(cpf / 10000000) % 10; d8 = Math.floor(cpf / 100000000) % 10;
+            for (let i = 0; i < cpf.length; i++) {
+                soma += parseInt(cpf[i]) * peso;
+                peso--;
+            }
 
-            somaprod1 = d0 * 2 + d1 * 3 + d2 * 4 + d3 * 5 + d4 * 6 + d5 * 7 + d6 * 8 + d7 * 9 + d8 * 10;
+            let resto = soma % 11;
+            const digito1 = resto < 2 ? 0 : 11 - resto;
 
-            restoAux = somaprod1 % 11;
-            dezena = (restoAux < 2) ? (0) : (11 - restoAux);
+            cpf += digito1;
 
-            somaprod2 = dezena * 2 +
-                d0 * 3 + d1 * 4 + d2 * 5 + d3 * 6 + d4 * 7 + d5 * 8 + d6 * 9 + d7 * 10 + d8 * 11;
+            soma = 0;
+            peso = 11;
 
-            restoAux = somaprod2 % 11;
-            unidade = restoAux < 2 ? 0 : 11 - restoAux;
+            for (let i = 0; i < cpf.length; i++) {
+                soma += parseInt(cpf[i]) * peso;
+                peso--;
+            }
 
-            return `${dezena}${unidade}`;
+            resto = soma % 11;
+            const digito2 = resto < 2 ? 0 : 11 - resto;
+
+            return `${digito1}${digito2}`;
         }
 
-        var digitosVerificadores = calcularDigitosVerificadores(parseInt(cpf));
-        var cpfCompleto = cpf + '-' + digitosVerificadores;
+        var digitosVerificadores = calcularDigitosVerificadores(cpf);
+        var cpfCompleto = cpf + digitosVerificadores;
 
         var novoContainer = document.createElement('div');
         novoContainer.className = 'cpf-container';
 
-
         novoContainer.innerHTML = `
-                    <div class="cpf-content">
-                        <h2>CPF Completo</h2>
-                        <p>${cpfCompleto}</p>
-                        <button class="deleteBtn">Deletar</button>
-                    </div>
-                `;
-
+            <div class="cpf-content">
+                <h2>Dígitos verificados</h2>
+                <p>CPF: ${cpfCompleto}</p>
+                <p>Dígitos: ${digitosVerificadores}</p>
+                <button class="deleteBtn">Deletar</button>
+            </div>
+        `;
 
         document.body.appendChild(novoContainer);
-
 
         novoContainer.querySelector('.deleteBtn').addEventListener('click', function () {
             document.body.removeChild(novoContainer);
         });
 
+        cpfInput.value = '';
+    } else {
+        alert('Digite os 9 primeiros dígitos do CPF antes de verificar.');
+    }
+});
 
         cpfInput.value = '';
     } else {
