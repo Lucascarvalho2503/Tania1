@@ -57,9 +57,3 @@ document.getElementById('verificarBtn').addEventListener('click', function () {
         alert('Digite os 9 primeiros dígitos do CPF antes de verificar.');
     }
 });
-
-        cpfInput.value = '';
-    } else {
-        alert('Digite os 9 primeiros dígitos do CPF antes de verificar.');
-    }
-});
